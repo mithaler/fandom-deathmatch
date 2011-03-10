@@ -1,6 +1,17 @@
 #!/usr/bin/ruby
 
-desc "Migrates the schema to the database. Wipes out all data there!"
-task :setup_schema do
-    require 'src/schema'
+require 'src/schema'
+
+namespace :db do
+    task :up do
+        FandomSchema.up
+        puts "Schema loaded!"
+    end
+
+    task :down do
+        FandomSchema.down
+        puts "Schema dropped!"
+    end
+
+    task :reload => [:down, :up]
 end
