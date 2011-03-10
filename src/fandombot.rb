@@ -1,7 +1,5 @@
 #!/usr/bin/ruby
 
-require 'src/config'
-
 require 'rubygems'
 require 'bundler/setup'
 require 'sinatra'
@@ -9,6 +7,7 @@ require 'twitter'
 require 'sequel'
 
 DB = Sequel.connect(ENV['DATABASE_URL'] || 'sqlite://my.db')
+require 'src/config'
 require 'src/models'
 
 =begin
