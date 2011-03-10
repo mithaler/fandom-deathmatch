@@ -16,20 +16,21 @@ module FandomSchema
         DB.create_table :tournaments do
             primary_key :id
             timestamp :start_time
+            boolean :complete, :default => false
         end
 
         DB.create_table :tournaments_characters do
             foreign_key :character_id, :characters
             foreign_key :tournament_id, :tournaments
-            varchar :status, :size => 10
+            varchar :status, :size => 10, :default => 'ready'
         end
 
         DB.create_table :matches do
             primary_key :id
-            foreign_key :combatant_a, :characters
-            foreign_key :combatant_b, :characters
+            foreign_key :combatant_a_id, :characters
+            foreign_key :combatant_b_id, :characters
             foreign_key :tournament_id, :tournaments
-            boolean :complete
+            boolean :complete, :default => false
             varchar :result, :size => 5
         end
 

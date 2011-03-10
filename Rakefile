@@ -2,6 +2,10 @@
 
 require 'src/schema'
 
+task :console do
+    sh "irb -r 'src/fandombot'"
+end
+
 namespace :db do
     task :up do
         FandomSchema.up
