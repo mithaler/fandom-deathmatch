@@ -13,7 +13,7 @@ end
 
 DB.create_table :tournaments do
     primary_key :id
-    datetime :start_time
+    timestamp :start_time
 end
 
 DB.create_table :tournaments_characters do
