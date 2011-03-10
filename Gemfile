@@ -1,4 +1,6 @@
 source 'http://rubygems.org'
+source 'http://gemcutter.org'
 gem 'sinatra'
 gem 'sequel'
 gem 'twitter'
+gem 'yajl-ruby'
