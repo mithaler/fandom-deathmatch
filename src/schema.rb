@@ -3,7 +3,7 @@
 require 'rubygems'
 require 'sequel'
 
-DB = Sequel.sqlite '../fandom.db'
+DB = Sequel.connect(ENV['DATABASE_URL'] || 'sqlite://my.db')
 
 DB.create_table :characters do
     primary_key :id
