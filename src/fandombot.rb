@@ -23,3 +23,9 @@ end
 get '/' do
     puts "Hello world!"
 end
+
+get '/twitter-test/:status' do |s|
+    c = Twitter::Client.new
+    c.update(s)
+end
+
