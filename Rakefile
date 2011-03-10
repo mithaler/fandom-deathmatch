@@ -2,6 +2,10 @@
 
 require 'src/schema'
 
+task :run do
+    sh "thin -R config.ru start"
+end
+
 task :console do
     sh "irb -r 'src/fandombot'"
 end
@@ -19,3 +23,5 @@ namespace :db do
 
     task :reload => [:down, :up]
 end
+
+task :default => :run

@@ -5,6 +5,7 @@ require 'bundler/setup'
 require 'sinatra'
 require 'twitter'
 require 'sequel'
+require 'erb'
 
 DB = Sequel.connect(ENV['DATABASE_URL'] || 'sqlite://my.db')
 require 'src/config'
@@ -20,11 +21,5 @@ end
 =end
 
 get '/' do
-    puts "Hello world!"
+    erb :index
 end
-
-get '/twitter-test/:status' do |s|
-    c = Twitter::Client.new
-    c.update(s)
-end
-
