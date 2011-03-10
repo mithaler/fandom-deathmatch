@@ -15,6 +15,10 @@ class Tournament < Sequel::Model
         }
     }
 
+    def current_match
+        self.matches_dataset.where(:complete => false).first
+    end
+
     def ready_combatants
         self.characters_dataset.where(:status => 'won').update(:status => 'ready')
     end
