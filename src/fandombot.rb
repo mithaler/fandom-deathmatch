@@ -5,7 +5,7 @@ require 'bundler/setup'
 require 'sinatra'
 require 'twitter'
 require 'sequel'
-require 'erb'
+require 'haml'
 
 DB = Sequel.connect(ENV['DATABASE_URL'] || 'sqlite://my.db')
 require 'src/config'
@@ -21,5 +21,5 @@ end
 =end
 
 get '/' do
-    erb :index
+    haml :index
 end

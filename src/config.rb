@@ -1,5 +1,7 @@
 #!/usr/bin/ruby
 
+set :haml, :format => :html5
+
 $MATCH_TIME = 1800
 
 Twitter.configure do |config|

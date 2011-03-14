@@ -9,6 +9,7 @@ GEM
       rack (>= 1.1.0, < 2)
     faraday_middleware (0.3.2)
       faraday (~> 0.5.4)
+    haml (3.0.25)
     hashie (1.0.0)
     multi_json (0.0.5)
     multi_xml (0.2.1)
@@ -33,6 +34,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  haml
   sequel
   sinatra
   twitter
