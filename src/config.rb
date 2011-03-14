@@ -3,6 +3,7 @@
 set :haml, :format => :html5
 
 $MATCH_TIME = 1800
+$BOT_USERNAME = 'FanDeathBot'
 
 Twitter.configure do |config|
     config.consumer_key = ENV['TWITTER_KEY']
@@ -11,3 +12,4 @@ Twitter.configure do |config|
     config.oauth_token_secret = ENV['TWITTER_TOKEN_SECRET']
 end
 
+$CLIENT = Twitter::Client.new

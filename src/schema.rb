@@ -32,6 +32,7 @@ module FandomSchema
             foreign_key :tournament_id, :tournaments
             boolean :complete, :default => false
             varchar :result, :size => 5
+            timestamp :start_time
         end
 
         DB.create_table :votes do
@@ -39,7 +40,7 @@ module FandomSchema
             foreign_key :match_id, :matches
             varchar :vote, :size => 10
             varchar :user, :size => 32
-            varchar :tweet_id, :size => 32
+            bigint :tweet_id
             text :explanation
         end
     end

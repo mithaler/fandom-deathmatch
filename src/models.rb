@@ -3,6 +3,9 @@
 class Character < Sequel::Model
     many_to_many :tournaments, :join_table => :tournaments_characters
 
+    def to_s
+        self.name
+    end
 end
 
 class Tournament < Sequel::Model
@@ -59,8 +62,16 @@ class Match < Sequel::Model
     many_to_one :tournament
     many_to_one :combatant_a, :key => :combatant_a_id, :class => :Character
     many_to_one :combatant_b, :key => :combatant_b_id, :class => :Character
+
+    def first_post
+        $CLIENT.update("Match starting: #{self.combatant_a.to_s} vs. #{self.combatant_b.to_s}! Who wins?")
+    end
 end
 
 class Vote < Sequel::Model
     many_to_one :match
+
+    def self.max_id
+        self.max(:tweet_id)
+    end
 end
