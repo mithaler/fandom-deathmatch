@@ -66,6 +66,18 @@ class Match < Sequel::Model
     def first_post
         $CLIENT.update("Match starting: #{self.combatant_a.to_s} vs. #{self.combatant_b.to_s}! Who wins?")
     end
+
+    def ended?
+        Time.now - self.start_time > $MATCH_TIME
+    end
+
+    def result
+        results = {:a => 0, :b => 0, :team => 0}
+        votes.each do |v|
+            results[v.vote] += 1
+        end
+        results
+    end
 end
 
 class Vote < Sequel::Model

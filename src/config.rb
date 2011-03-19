@@ -13,3 +13,9 @@ Twitter.configure do |config|
 end
 
 $CLIENT = Twitter::Client.new
+
+$VOTE_OPTIONS = {
+    1 => :a,
+    2 => :b,
+    3 => :team
+}
