@@ -53,7 +53,7 @@ class Tournament < Sequel::Model
     end
 
     def self.get_current
-        Tournament.where(:complete => false).first
+        Tournament.where(:complete => false).filter(:start_time <= Time.now).first
     end
 end
 
