@@ -3,7 +3,7 @@
 require 'src/schema'
 
 task :run do
-    sh "thin -R config.ru start"
+    sh "shotgun --server=thin --port=3000 config.ru"
 end
 
 task :console do
