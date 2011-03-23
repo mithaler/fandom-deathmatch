@@ -87,3 +87,7 @@ class Vote < Sequel::Model
         self.max(:tweet_id)
     end
 end
+
+class Team < Sequel::Model
+    many_to_many :characters
+end

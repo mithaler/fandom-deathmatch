@@ -43,6 +43,15 @@ module FandomSchema
             bigint :tweet_id
             text :explanation
         end
+
+        DB.create_table :teams do
+            primary_key :id
+        end
+
+        DB.create_table :characters_teams do
+            foreign_key :character_id
+            foreign_key :team_id
+        end
     end
 
     def self.down
