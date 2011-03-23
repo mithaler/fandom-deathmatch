@@ -76,7 +76,17 @@ class Match < Sequel::Model
         votes.each do |v|
             results[v.vote] += 1
         end
-        results
+
+        comparable = {}
+        results.each do |key, value|
+            if !comparable[value]
+                comparable[value] = [key]
+            else
+                comparable[value] << key
+            end
+        end
+
+        comparable.max_by {|key, value| key}
     end
 end
 

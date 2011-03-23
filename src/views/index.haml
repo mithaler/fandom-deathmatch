@@ -4,6 +4,7 @@
     %meta{:charset => 'utf-8'}
     %meta{:name => 'description', :content => "I'm a Fandom Deathmatch bot!"}
     %meta{:name => 'author', :content => 'Michael Louis Thaler'}
+    %link{:rel => :stylesheet, :type => 'text/css', :href => '/style.css'}
     %title Fandom Deathmatch!
   %body
     #container
@@ -11,3 +12,13 @@
         %h1 Fandom Deathmatch!
       #main
         %p I'm a Fandom Deathmatch bot!
+        %p
+          I'm a basic
+          %a{:href => 'http://www.sinatrarb.com/', :target => '_blank'}Sinatra
+          app, running on
+          = succeed '.' do
+            %a{:href => 'http://heroku.com', :target => '_blank'} Heroku
+          You can find my source on
+          = succeed '.' do
+            %a{:href => 'https://github.com/mithaler/fandom-deathmatch', :target => '_blank'} Github
+

@@ -44,6 +44,29 @@ get '/update' do
     end
 end
 
+# These are meant for human consumption
+
 get '/' do
     haml :index
+end
+
+get '/style.css' do
+    scss :style
+end
+
+get '/new-character' do
+    @characters = Tournament.get_current.characters
+    haml :new_character
+end
+
+post '/new-character' do
+    character = Character.new
+    character.name = params[:name]
+    character.fandom = params[:fandom]
+    t = Tournament.get_current
+    t.add_character character
+    t.save
+
+    @characters = Tournament.get_current.characters
+    haml :new_character
 end

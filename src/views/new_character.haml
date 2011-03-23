@@ -1,0 +1,33 @@
+!!!
+%html{:lang => :en}
+  %head
+    %meta{:charset => 'utf-8'}
+    %meta{:name => 'description', :content => "I'm a Fandom Deathmatch bot!"}
+    %meta{:name => 'author', :content => 'Michael Louis Thaler'}
+    %link{:rel => :stylesheet, :type => 'text/css', :href => '/style.css'}
+    %title Fandom Deathmatch Super Dynamic Character Entry!
+  %body
+    #container
+      %header
+        %h1 Fandom Deathmatch Super Dynamic Character Entry!
+      #main
+        #char_form
+          %form{:method => :post, :action => ''}
+            %div
+              %label{:for => :name} What's the character's name?
+            %div
+              %input{:id => :name, :type => :text, :name => :name}
+            %div{:style => 'margin-top: 1em'}
+              %label{:for => :fandom} What fandom is the character from?
+            %div
+              %input{:id => :fandom, :type => :text, :name => :fandom}
+            %div
+              %input{:type => :submit}
+        #char_list
+          %p Here are the characters already entered:
+          %ul
+            - @characters.each do |c|
+              %li
+                %strong= c.name
+                from
+                %em= c.fandom
