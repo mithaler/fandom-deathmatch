@@ -6,6 +6,7 @@ configure do
     set :match_time, 1800
     set :bot_username, 'FanDeathBot'
 
+    # TODO: remove this and make it a fuzzy name search
     set :vote_options, {
         1 => :a,
         2 => :b,
