@@ -68,7 +68,7 @@ class Match < Sequel::Model
     end
 
     def ended?
-        Time.now - self.start_time > $MATCH_TIME
+        Time.now - self.start_time > settings.match_time
     end
 
     def result

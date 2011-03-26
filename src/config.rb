@@ -1,9 +1,17 @@
 #!/usr/bin/ruby
 
-set :haml, :format => :html5
+configure do
+    set :haml, :format => :html5
 
-$MATCH_TIME = 1800
-$BOT_USERNAME = 'FanDeathBot'
+    set :match_time, 1800
+    set :bot_username, 'FanDeathBot'
+
+    set :vote_options, {
+        1 => :a,
+        2 => :b,
+        3 => :team
+    }
+end
 
 Twitter.configure do |config|
     config.consumer_key = ENV['TWITTER_KEY']
@@ -14,8 +22,3 @@ end
 
 $CLIENT = Twitter::Client.new
 
-$VOTE_OPTIONS = {
-    1 => :a,
-    2 => :b,
-    3 => :team
-}
