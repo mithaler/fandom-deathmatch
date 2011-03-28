@@ -10,6 +10,7 @@ end
 
 class Tournament < Sequel::Model
     one_to_many :matches
+    one_to_many :teams
     many_to_many :characters, {
         :join_table => :tournaments_characters,
         :select => [:id, :name, :fandom, :status],
@@ -62,13 +63,29 @@ class Match < Sequel::Model
     many_to_one :tournament
     many_to_one :combatant_a, :key => :combatant_a_id, :class => :Character
     many_to_one :combatant_b, :key => :combatant_b_id, :class => :Character
+    many_to_one :team_a, :key => :team_a_id, :class => :Team
+    many_to_one :team_b, :key => :team_b_id, :class => :Team
+
+    def a
+        if (team_a_id)
+            return team_a
+        end
+        combatant_a
+    end
+
+    def b
+        if (team_b_id)
+            return team_b
+        end
+        combatant_b
+    end
 
     def first_post
         $CLIENT.update("Match starting: #{self.combatant_a.to_s} vs. #{self.combatant_b.to_s}! Who wins?")
     end
 
     def ended?
-        Time.now - self.start_time > settings.match_time
+        (Time.now - start_time > settings.match_time) && result.length == 1
     end
 
     def result
@@ -100,4 +117,5 @@ end
 
 class Team < Sequel::Model
     many_to_many :characters
+    many_to_one :tournament
 end

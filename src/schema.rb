@@ -13,6 +13,16 @@ module FandomSchema
             varchar :fandom, :size => 32
         end
 
+        DB.create_table :teams do
+            primary_key :id
+            foreign_key :tournament_id, :tournaments
+        end
+
+        DB.create_table :characters_teams do
+            foreign_key :character_id
+            foreign_key :team_id
+        end
+
         DB.create_table :tournaments do
             primary_key :id
             timestamp :start_time
@@ -29,6 +39,8 @@ module FandomSchema
             primary_key :id
             foreign_key :combatant_a_id, :characters
             foreign_key :combatant_b_id, :characters
+            foreign_key :team_a_id, :teams
+            foreign_key :team_b_id, :teams
             foreign_key :tournament_id, :tournaments
             boolean :complete, :default => false
             varchar :result, :size => 5
@@ -43,18 +55,9 @@ module FandomSchema
             bigint :tweet_id
             text :explanation
         end
-
-        DB.create_table :teams do
-            primary_key :id
-        end
-
-        DB.create_table :characters_teams do
-            foreign_key :character_id
-            foreign_key :team_id
-        end
     end
 
     def self.down
-        DB.drop_table :characters, :tournaments, :tournaments_characters, :matches, :votes
+        DB.drop_table :characters, :teams, :characters_teams, :tournaments, :tournaments_characters, :matches, :votes
     end
 end

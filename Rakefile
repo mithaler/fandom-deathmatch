@@ -1,6 +1,9 @@
 #!/usr/bin/ruby
 
 require 'src/schema'
+require 'rake/clean'
+
+CLEAN.include('my.db')
 
 task :run do
     sh "shotgun --server=thin --port=3000 config.ru"
@@ -16,10 +19,7 @@ namespace :db do
         puts "Schema loaded!"
     end
 
-    task :down do
-        FandomSchema.down
-        puts "Schema dropped!"
-    end
+    task :down => :clean
 
     task :reload => [:down, :up]
 end

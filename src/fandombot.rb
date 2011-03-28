@@ -21,7 +21,21 @@ get '/update' do
 
     # check if match is over
     if m.ended?
-        # announce match result
+        winner = m.result
+        if (winner == :a)
+            winner = m.a
+            $CLIENT.update("Match ended! The winner is #{winner.name}! The next match will start shortly.")
+        elsif (winner == :b)
+            winner = m.b
+            $CLIENT.update("Match ended! The winner is #{winner.name}! The next match will start shortly.")
+        elsif (winner == :team)
+            winner = Team.new
+            winner.add_character(m.a)
+            winner.add_character(m.b)
+            winner.tournament = t
+            winner.save
+            $CLIENT.update("Match ended! The combatants teamed up! The next match will start shortly.")
+        end
     else
         # search for new votes and tally them
         search = Twitter::Search.new
