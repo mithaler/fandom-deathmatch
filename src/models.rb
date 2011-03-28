@@ -4,7 +4,22 @@ class Character < Sequel::Model
     many_to_many :tournaments, :join_table => :tournaments_characters
 
     def to_s
-        self.name
+        name
+    end
+
+    def abbreviations
+        n = name
+        words = name.split ' '
+
+        if words.length > 1
+            initials = ''
+            words.each do |w|
+                initials << w[0,1]
+            end
+            words << initials
+        end
+
+        words
     end
 end
 
