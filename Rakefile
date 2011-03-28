@@ -19,7 +19,15 @@ namespace :db do
         puts "Schema loaded!"
     end
 
-    task :down => :clean
+    task :down do
+        if ENV['RACK_ENV'] == :production
+            FandomSchema.down
+        else
+            Rake::Task['clean'].invoke
+        end
+
+        puts "Schema dropped!"
+    end
 
     task :reload => [:down, :up]
 end
