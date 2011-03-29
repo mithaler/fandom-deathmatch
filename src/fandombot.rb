@@ -69,6 +69,13 @@ get '/style.css' do
 end
 
 get '/new-character' do
+	t = Tournament.get_current
+	if t.nil?
+		t = Tournament.new
+		t.start_time = Time.now
+		t.save
+	end
+
     @characters = Tournament.get_current.characters
     haml :new_character
 end

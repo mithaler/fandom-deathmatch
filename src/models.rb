@@ -133,4 +133,23 @@ end
 class Team < Sequel::Model
     many_to_many :characters
     many_to_one :tournament
+
+    def abbreviations
+        characters.inject([]) { |all, char| all.concat(char.abbreviations) }
+    end
+
+    def to_s
+        chars = characters
+        names = ''
+        chars.each_index do |i|
+            if i == chars.length - 1
+                names << ' and ' + chars[i].to_s
+            elsif i == 0
+                names << chars[i].to_s
+            else
+                names << ', ' + chars[i].to_s
+            end
+        end
+        names
+    end
 end
