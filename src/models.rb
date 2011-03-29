@@ -8,7 +8,6 @@ class Character < Sequel::Model
     end
 
     def abbreviations
-        n = name
         words = name.split ' '
 
         if words.length > 1
