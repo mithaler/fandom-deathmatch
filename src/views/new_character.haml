@@ -23,11 +23,12 @@
               %input{:id => :fandom, :type => :text, :name => :fandom}
             %div
               %input{:type => :submit}
-        #char_list
-          %p Here are the characters already entered:
-          %ul
-            - @characters.each do |c|
-              %li
-                %strong&= c.name
-                from
-                %em&= c.fandom
+        - if !@characters.empty?
+          #char_list
+            %p Here are the characters already entered:
+            %ul
+              - @characters.each do |c|
+                %li
+                  %strong&= c.name
+                  from
+                  %em&= c.fandom
