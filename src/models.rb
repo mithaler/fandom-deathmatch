@@ -20,6 +20,14 @@ class Character < Sequel::Model
 
         words
     end
+
+    def status=(str)
+        DB[:tournaments_characters].where(:tournament_id => Tournament.get_current.id, :character_id => id).update(:status => str)
+    end
+
+    def status
+        DB[:tournaments_characters].where(:tournament_id => Tournament.get_current.id, :character_id => id).first[:status]
+    end
 end
 
 class Tournament < Sequel::Model
@@ -34,18 +42,21 @@ class Tournament < Sequel::Model
     }
 
     def current_match
-        self.matches_dataset.where(:complete => false).first
+        matches_dataset.where(:complete => false).first
     end
 
     def ready_combatants
-        self.characters_dataset.where(:status => 'won').update(:status => 'ready')
+        characters_dataset.where(:status => 'won').update(:status => 'ready')
+        teams_dataset.where(:status => 'won').update(:status => 'ready')
     end
 
     def next_match
         m = Match.new
         m.tournament = self
 
-        pool = self.characters_dataset.where(:status => 'ready')
+        # This isn't a proper bracket; it's a pool of winners with next combatants randomly chosen from it.
+        # Emulates picking winners out of a hat.
+        pool = characters_dataset.where(:status => 'ready')
         count = pool.count
 
         if count == 0
