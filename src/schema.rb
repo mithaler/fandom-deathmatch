@@ -15,6 +15,7 @@ module FandomSchema
 
         DB.create_table :teams do
             primary_key :id
+            varchar :status, :size => 10, :default => 'ready'
             foreign_key :tournament_id, :tournaments
         end
 
