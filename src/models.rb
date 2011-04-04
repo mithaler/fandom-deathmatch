@@ -144,6 +144,16 @@ class Team < Sequel::Model
     many_to_many :characters
     many_to_one :tournament
 
+    def add_combatant(combatant)
+        if combatant.respond_to? :characters
+            combatant.characters.each do |c|
+                add_character c
+            end
+        else
+            add_character a
+        end
+    end
+
     def abbreviations
         characters.inject([]) { |all, char| all.concat(char.abbreviations) }
     end

@@ -25,14 +25,27 @@ get '/update' do
         if (winner == :a)
             winner = m.a
             $CLIENT.update("Match ended! The winner is #{winner.name}! The next match will start shortly.")
+
+            winner.status = 'won'
+            winner.save
+            loser = m.b
+            loser.status = 'out'
+            loser.save
         elsif (winner == :b)
             winner = m.b
             $CLIENT.update("Match ended! The winner is #{winner.name}! The next match will start shortly.")
+
+            winner.status = 'won'
+            winner.save
+            loser = m.a
+            loser.status = 'out'
+            loser.save
         elsif (winner == :team)
             winner = Team.new
-            winner.add_character(m.a)
-            winner.add_character(m.b)
+            winner.add_combatant(m.a)
+            winner.add_combatant(m.b)
             winner.tournament = t
+            winner.status = 'won'
             winner.save
             $CLIENT.update("Match ended! The combatants teamed up! The next match will start shortly.")
         end
@@ -69,12 +82,12 @@ get '/style.css' do
 end
 
 get '/new-character' do
-	t = Tournament.get_current
-	if t.nil?
-		t = Tournament.new
-		t.start_time = Time.now
-		t.save
-	end
+    t = Tournament.get_current
+    if t.nil?
+        t = Tournament.new
+        t.start_time = Time.now
+        t.save
+    end
 
     @characters = Tournament.get_current.characters
     haml :new_character
