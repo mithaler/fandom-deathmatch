@@ -60,10 +60,11 @@ class Tournament < Sequel::Model
         count = pool.count
 
         if count == 0
-            # go to next level
+            # no combatants left; go to next level of matches
         elsif count == 1
-            # check if tournament is over, if not, match with another winner
+            # one dangling combatant in the ready pool; match with another winner
         else
+            # > 1 ready combatants; choose two at random
             c = pool.all[rand(pool.count)]
             DB[:tournaments_characters].where(:character_id => c.id, :tournament_id => self.id).update(:status => 'fighting')
             m.combatant_a = c
