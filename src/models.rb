@@ -1,7 +1,6 @@
 #!/usr/bin/ruby
 
 class Character < Sequel::Model
-    many_to_many :tournaments, :join_table => :tournaments_characters
 
     def to_s
         name
@@ -28,6 +27,18 @@ class Character < Sequel::Model
     def status
         DB[:tournaments_characters].where(:tournament_id => Tournament.get_current.id, :character_id => id).first[:status]
     end
+
+    def team_with(other)
+        if other.class == 'Team'
+            other.add_combatant self
+            return other
+        else
+            t = Team.new
+            t.add_combatant self
+            t.add_combatant other
+            return t
+        end
+    end
 end
 
 class Tournament < Sequel::Model
@@ -45,8 +56,8 @@ class Tournament < Sequel::Model
         matches_dataset.where(:complete => false).first
     end
 
-    def ready_combatants
-        characters_dataset.where(:status => 'won').update(:status => 'ready')
+    # Resets all combatants that won the previous round to ready status.
+    def level_advance
         teams_dataset.where(:status => 'won').update(:status => 'ready')
     end
 
@@ -56,13 +67,15 @@ class Tournament < Sequel::Model
 
         # This isn't a proper bracket; it's a pool of winners with next combatants randomly chosen from it.
         # Emulates picking winners out of a hat.
-        pool = characters_dataset.where(:status => 'ready')
+        pool = teams_dataset.where(:status => 'ready')
         count = pool.count
 
         if count == 0
-            # no combatants left; go to next level of matches
+            level_advance
+            # run same code as else block
         elsif count == 1
-            # one dangling combatant in the ready pool; match with another winner
+            winners = teams_dataset.where(:status => 'won')
+            # pick one winner and make a match with it
         else
             # > 1 ready combatants; choose two at random
             c = pool.all[rand(pool.count)]
@@ -87,24 +100,11 @@ end
 class Match < Sequel::Model
     one_to_many :votes
     many_to_one :tournament
-    many_to_one :combatant_a, :key => :combatant_a_id, :class => :Character
-    many_to_one :combatant_b, :key => :combatant_b_id, :class => :Character
     many_to_one :team_a, :key => :team_a_id, :class => :Team
     many_to_one :team_b, :key => :team_b_id, :class => :Team
 
-    def a
-        if (team_a_id)
-            return team_a
-        end
-        combatant_a
-    end
-
-    def b
-        if (team_b_id)
-            return team_b
-        end
-        combatant_b
-    end
+    alias :a :team_a
+    alias :b :team_b
 
     def first_post
         $CLIENT.update("Match starting: #{self.combatant_a.to_s} vs. #{self.combatant_b.to_s}! Who wins?")
@@ -145,13 +145,14 @@ class Team < Sequel::Model
     many_to_many :characters
     many_to_one :tournament
 
+    # Adds another combatant to this Team. If it's another Team, adds all of its members to this one.
     def add_combatant(combatant)
         if combatant.respond_to? :characters
             combatant.characters.each do |c|
                 add_character c
             end
         else
-            add_character a
+            add_character combatant
         end
     end
 

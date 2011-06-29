@@ -24,29 +24,34 @@ get '/update' do
         winner = m.result
         if (winner == :a)
             winner = m.a
-            $CLIENT.update("Match ended! The winner is #{winner.name}! The next match will start shortly.")
-
             winner.status = 'won'
             winner.save
+
             loser = m.b
             loser.status = 'out'
             loser.save
+
+            $CLIENT.update("Match ended! The winner is #{winner.to_s}! The next match will start shortly.")
         elsif (winner == :b)
             winner = m.b
-            $CLIENT.update("Match ended! The winner is #{winner.name}! The next match will start shortly.")
-
             winner.status = 'won'
             winner.save
+
             loser = m.a
             loser.status = 'out'
             loser.save
+
+            $CLIENT.update("Match ended! The winner is #{winner.to_s}! The next match will start shortly.")
         elsif (winner == :team)
-            winner = Team.new
-            winner.add_combatant(m.a)
+            winner = m.a
             winner.add_combatant(m.b)
             winner.tournament = t
             winner.status = 'won'
             winner.save
+
+            loser = m.b
+            loser.status = 'subsumed'
+            loser.save
             $CLIENT.update("Match ended! The combatants teamed up! The next match will start shortly.")
         end
     else
@@ -97,8 +102,11 @@ post '/new-character' do
     character = Character.new
     character.name = params[:name]
     character.fandom = params[:fandom]
-    t = Tournament.get_current
+
+    t = Team.new.save
     t.add_character character
+    t.tournament = Tournament.get_current
+    t.status = 'ready'
     t.save
 
     @characters = Tournament.get_current.characters
